@@ -1,11 +1,19 @@
-localStorage.setItem('list', JSON.stringify([]))
-const ourList = [];
+// First time excecution
+window.onload = function () {
+    if (localStorage.getItem("hasCodeRunBefore") === null) {
+        localStorage.setItem('list', JSON.stringify([]))
+        const ourList = [];
+        localStorage.setItem("hasCodeRunBefore", true);
+    }
+}
 
+// Fetching Elements
 let input = document.querySelector('.input');
 const addButton = document.querySelector('.addButton');
 const container = document.querySelector('.container');
 
-const elementCreate = () => {
+// function for element creation
+function createElement(){
     let item = document.createElement('div');
     item.className = 'item';
     item.style.display = 'flex';
@@ -41,7 +49,6 @@ const elementCreate = () => {
     let storedList = JSON.parse(localStorage.getItem('list'));
     let index = storedList.indexOf(temp);
 
-
     editButton.addEventListener('click', (e) => {
         itemInput.contentEditable = true;
         editButton.style.display = 'none';
@@ -52,13 +59,10 @@ const elementCreate = () => {
         itemInput.contentEditable = false;
         editButton.style.display = 'block';
         doneButton.style.display = 'none';
-        if(itemInput.innerText == ""){
-            storedList.splice(index, 1, itemInput.innerText);
-            localStorage.setItem('list', JSON.stringify(storedList));    
-        } else{
-            alert("PLease fill the the text field")
-        }
-   })
+        storedList.splice(index, 1, itemInput.innerText);
+        localStorage.setItem('list', JSON.stringify(storedList));
+
+    })
 
     deleteButton.addEventListener('click', () => {
         container.removeChild(item)
@@ -68,7 +72,7 @@ const elementCreate = () => {
 }
 
 // for rendering list on add click 
-const renderToDo = () => {
+function renderToDo() {
     let list = localStorage.getItem('list')
     let ourList = JSON.parse(list)
 
@@ -83,13 +87,11 @@ const renderToDo = () => {
         container.append(item)
 
 
-        // editButton 
         let editButton = document.createElement('button');
         editButton.innerHTML = 'EDIT';
         editButton.className = 'editButton';
         item.append(editButton);
 
-        //  doneButton
         let doneButton = document.createElement('button');
         doneButton.innerHTML = 'DONE';
         doneButton.style.color = '#1C8D73';
@@ -135,8 +137,7 @@ const renderToDo = () => {
 }
 
 // add list handler 
-const addHandler = () => {
-
+function addHandler() {
     if (localStorage.length == 0) {
         localStorage.setItem('list', JSON.stringify([]))
     }
@@ -145,7 +146,7 @@ const addHandler = () => {
         let storedList = JSON.parse(localStorage.getItem('list'));
         storedList.push(input.value);
         localStorage.setItem('list', JSON.stringify(storedList))
-        elementCreate()
+        createElement()
         input.value = '';
     }
 }
